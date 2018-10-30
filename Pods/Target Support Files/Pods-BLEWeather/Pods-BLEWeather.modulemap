@@ -1,0 +1,6 @@
+framework module Pods_BLEWeather {
+  umbrella header "Pods-BLEWeather-umbrella.h"
+
+  export *
+  module * { export * }
+}
