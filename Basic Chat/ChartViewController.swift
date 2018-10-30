@@ -40,7 +40,7 @@ class ChartViewController: UIViewController, CBPeripheralManagerDelegate {
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "Notify"), object: nil , queue: nil){
             notification in
-            let firstSpace = "X "
+            let firstSpace = "* "
             // let addToString = "\n"
             let textText = firstSpace + (characteristicASCIIValue as String)
             
