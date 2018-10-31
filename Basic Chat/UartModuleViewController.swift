@@ -18,7 +18,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     @IBOutlet weak var baseTextView: UITextView!
     @IBOutlet weak var humLabel: UILabel!
     @IBOutlet weak var newLabel: UILabel!
-    @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var switchUI: UISwitch!
