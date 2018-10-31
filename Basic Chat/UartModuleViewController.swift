@@ -180,18 +180,11 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
                 
             }
             
-            
+            else {
             self.baseTextView.attributedText = self.consoleAsciiText
-            
+            }
         
         }
-    }
-    
-    @IBAction func clickSendAction(_ sender: AnyObject) {
-        // outgoingData()
-        // print(tempDataArray)
-        
-        
     }
     
     
@@ -270,8 +263,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     @IBAction func switchAction(_ sender: Any) {
         if switchUI.isOn {
             print("On ")
-            writeCharacteristic(val: 1)
-            print(writeCharacteristic)
+            // writeCharacteristic(val: 1)
+            // print(writeCharacteristic)
+            writeValue(data: "1")
             self.baseTextView.backgroundColor = UIColor.lightGray
             
         }
@@ -279,9 +273,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
         {
             
             print("Off")
-            writeCharacteristic(val: 0)
-            print(writeCharacteristic)
-            
+//            writeCharacteristic(val: 0)
+//            print(writeCharacteristic)
+            writeValue(data: "0")
             self.baseTextView.backgroundColor = UIColor.darkGray
             self.baseTextView.textColor = UIColor.darkGray
         }
