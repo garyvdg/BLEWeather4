@@ -10,15 +10,12 @@
 import UIKit
 import CoreBluetooth
 
-
-
-class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, UITextViewDelegate, UITextFieldDelegate {
+class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, UITextViewDelegate {
     
     //UI
     @IBOutlet weak var baseTextView: UITextView!
     @IBOutlet weak var humLabel: UILabel!
     @IBOutlet weak var newLabel: UILabel!
-    @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var switchUI: UISwitch!
     @IBOutlet weak var battColor: UILabel!
@@ -34,18 +31,13 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
         self.baseTextView.delegate = self
-        self.inputTextField.delegate = self
+    
         //Base text view setup
         self.baseTextView.layer.borderWidth = 3.0
         self.baseTextView.layer.borderColor = UIColor.darkGray.cgColor
         self.baseTextView.layer.cornerRadius = 3.0
         
-        
         self.baseTextView.text = ""
-        //Input Text Field setup
-        self.inputTextField.layer.borderWidth = 2.0
-        self.inputTextField.layer.borderColor = UIColor.blue.cgColor
-        self.inputTextField.layer.cornerRadius = 3.0
         
         //Create and start the peripheral manager
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
@@ -64,18 +56,12 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
         // self.peripheralManager = nil
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self)
-        
     }
-    
     
     @IBAction func goToChart(_ sender: Any) {
         performSegue(withIdentifier: "goToChartView", sender: self)
         
-        
-        
     }
-    
-    
     
     func updateIncomingData () {
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "Notify"), object: nil , queue: nil){
@@ -136,10 +122,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
             self.newLabel.text = tempString
             self.humLabel.text = humString
                 
-                
-                
-                
-                
             let battValue = String(labelString[battRange])
                 
                 if battValue == "b"
@@ -187,26 +169,26 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     }
     
     
-    func outgoingData () {
-        let appendString = "\n"
-        
-        let inputText = inputTextField.text
-        
-        let myFont = UIFont(name: "Helvetica Neue", size: 15.0)
-        let myAttributes1 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.blue]
-        
-        writeValue(data: inputText!)
-        
-        let attribString = NSAttributedString(string: "[Outgoing]: " + inputText! + appendString, attributes: myAttributes1)
-        let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
-        newAsciiText.append(attribString)
-        
-        consoleAsciiText = newAsciiText
-        baseTextView.attributedText = consoleAsciiText
-        //erase what's in the text field
-        inputTextField.text = ""
-        
-    }
+//    func outgoingData () {
+//        let appendString = "\n"
+//
+//        let inputText = inputTextField.text
+//
+//        let myFont = UIFont(name: "Helvetica Neue", size: 15.0)
+//        let myAttributes1 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.blue]
+//
+//        writeValue(data: inputText!)
+//
+//        let attribString = NSAttributedString(string: "[Outgoing]: " + inputText! + appendString, attributes: myAttributes1)
+//        let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
+//        newAsciiText.append(attribString)
+//
+//        consoleAsciiText = newAsciiText
+//        baseTextView.attributedText = consoleAsciiText
+//        //erase what's in the text field
+//        inputTextField.text = ""
+//
+//    }
     
     // Write functions
     func writeValue(data: String){
@@ -219,31 +201,31 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
         }
     }
     
-    func writeCharacteristic(val: Int8){
-        var val = val
-        let ns = NSData(bytes: &val, length: MemoryLayout<Int8>.size)
-        blePeripheral!.writeValue(ns as Data, for: txCharacteristic!, type: CBCharacteristicWriteType.withResponse)
-    }
+//    func writeCharacteristic(val: Int8){
+//        var val = val
+//        let ns = NSData(bytes: &val, length: MemoryLayout<Int8>.size)
+//        blePeripheral!.writeValue(ns as Data, for: txCharacteristic!, type: CBCharacteristicWriteType.withResponse)
+//    }
     
     
     
     //MARK: UITextViewDelegate methods
-    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        if textView === baseTextView {
-            //tapping on consoleview dismisses keyboard
-            inputTextField.resignFirstResponder()
-            return false
-        }
-        return true
-    }
+//    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+//        if textView === baseTextView {
+//            //tapping on consoleview dismisses keyboard
+//            // inputTextField.resignFirstResponder()
+//            return false
+//        }
+//        return true
+//    }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        scrollView.setContentOffset(CGPoint(x:0, y:250), animated: true)
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        scrollView.setContentOffset(CGPoint(x:0, y:0), animated: true)
-    }
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        scrollView.setContentOffset(CGPoint(x:0, y:250), animated: true)
+//    }
+//
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+//        scrollView.setContentOffset(CGPoint(x:0, y:0), animated: true)
+//    }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
@@ -265,18 +247,13 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
             // writeCharacteristic(val: 1)
             // print(writeCharacteristic)
             writeValue(data: "1")
-            self.baseTextView.backgroundColor = UIColor.lightGray
-            
         }
         else
         {
-            
             print("Off")
 //            writeCharacteristic(val: 0)
 //            print(writeCharacteristic)
             writeValue(data: "0")
-            self.baseTextView.backgroundColor = UIColor.darkGray
-            self.baseTextView.textColor = UIColor.darkGray
         }
     }
     
@@ -286,7 +263,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        outgoingData()
+        // outgoingData()
         return(true)
     }
     
