@@ -121,23 +121,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oqA-bO-3LA" userLabel="ContentView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                         <subviews>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ObH-3Y-DNE">
-                                                <rect key="frame" x="0.0" y="180" width="375" height="360"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <attributedString key="attributedText">
-                                                    <fragment content="Data goes here...">
-                                                        <attributes>
-                                                            <font key="NSFont" metaFont="system" size="14"/>
-                                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                <connections>
-                                                    <outlet property="delegate" destination="aQA-m6-Bjv" id="AoN-ge-dlU"/>
-                                                </connections>
-                                            </textView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHj-Js-TcI" userLabel="MainContainer">
                                                 <rect key="frame" x="0.0" y="44" width="375" height="124"/>
                                                 <subviews>
@@ -232,7 +215,6 @@
                         <barButtonItem key="backBarButtonItem" title="Disconnect" id="bh9-F4-hZD"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="baseTextView" destination="ObH-3Y-DNE" id="pET-s0-crm"/>
                         <outlet property="battColor" destination="pyL-wG-WP2" id="d8T-bX-862"/>
                         <outlet property="humLabel" destination="Uv3-jW-OvO" id="KUc-ue-AhG"/>
                         <outlet property="newLabel" destination="A2j-Dg-dTR" id="0tU-dD-9gj"/>

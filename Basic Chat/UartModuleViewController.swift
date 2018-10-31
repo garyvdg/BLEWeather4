@@ -10,7 +10,7 @@
 import UIKit
 import CoreBluetooth
 
-class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, UITextViewDelegate {
+class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
     
     //UI
     @IBOutlet weak var baseTextView: UITextView!
@@ -30,14 +30,14 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
         super.viewDidLoad()
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
-        self.baseTextView.delegate = self
-    
-        //Base text view setup
-        self.baseTextView.layer.borderWidth = 3.0
-        self.baseTextView.layer.borderColor = UIColor.darkGray.cgColor
-        self.baseTextView.layer.cornerRadius = 3.0
-        
-        self.baseTextView.text = ""
+//        self.baseTextView.delegate = self
+//
+//        //Base text view setup
+//        self.baseTextView.layer.borderWidth = 3.0
+//        self.baseTextView.layer.borderColor = UIColor.darkGray.cgColor
+//        self.baseTextView.layer.cornerRadius = 3.0
+//
+//        self.baseTextView.text = ""
         
         //Create and start the peripheral manager
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
@@ -47,7 +47,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.baseTextView.text = ""
+        // self.baseTextView.text = ""
         
     }
     
@@ -68,20 +68,20 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
             notification in
             var strLength: Int
             
-            let appendString = "\n"
+            // let appendString = "\n"
             let leadSpace = " "
             let tempUnits = "\u{00B0} C"
             let humUnits = " % RH"
             let labelString = leadSpace + (characteristicASCIIValue as String)
-            let myFont = UIFont(name: "Helvetica Neue", size: 20.0)
-            let myAttributes2 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.darkGray]
-            let attribString = NSAttributedString(string: "[Rec]:   " + (characteristicASCIIValue as String) + appendString, attributes: myAttributes2)
-            let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
-            // self.baseTextView.attributedText = NSAttributedString(string: (characteristicASCIIValue as String), attributes: myAttributes2)
-            
-            newAsciiText.append(attribString)
-            
-            self.consoleAsciiText = newAsciiText
+//            let myFont = UIFont(name: "Helvetica Neue", size: 20.0)
+//            let myAttributes2 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+//            let attribString = NSAttributedString(string: "[Rec]:   " + (characteristicASCIIValue as String) + appendString, attributes: myAttributes2)
+//            let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
+//            // self.baseTextView.attributedText = NSAttributedString(string: (characteristicASCIIValue as String), attributes: myAttributes2)
+//
+//            newAsciiText.append(attribString)
+//
+//            self.consoleAsciiText = newAsciiText
             
             strLength = labelString.count
             // print(strLength)
@@ -161,9 +161,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
                 
             }
             
-            else {
-            self.baseTextView.attributedText = self.consoleAsciiText
-            }
+//            else {
+//            self.baseTextView.attributedText = self.consoleAsciiText
+//            }
         
         }
     }
