@@ -4,22 +4,19 @@
 //
 //  Created by Trevor Beaton on 12/4/16.
 //  Copyright © 2016 Vanguard Logic LLC. All rights reserved.
-//
+//  Modified by Gary Vandergaast 2018 November 1
 
 
 import UIKit
 import CoreBluetooth
 
-
-
-class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, UITextViewDelegate, UITextFieldDelegate {
+class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
     
     //UI
-    @IBOutlet weak var baseTextView: UITextView!
+    
+    @IBOutlet weak var blinkLamp: UILabel!
     @IBOutlet weak var humLabel: UILabel!
     @IBOutlet weak var newLabel: UILabel!
-    @IBOutlet weak var sendButton: UIButton!
-    @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var switchUI: UISwitch!
     @IBOutlet weak var battColor: UILabel!
@@ -29,24 +26,13 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     private var consoleAsciiText:NSAttributedString? = NSAttributedString(string: "")
     var tValue : Double = 0
     var tempDataArray = Array(repeating: 0.0, count: 10)
+    var blinker : Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        blinkLamp.text = ""
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
-        self.baseTextView.delegate = self
-        self.inputTextField.delegate = self
-        //Base text view setup
-        self.baseTextView.layer.borderWidth = 3.0
-        self.baseTextView.layer.borderColor = UIColor.darkGray.cgColor
-        self.baseTextView.layer.cornerRadius = 3.0
-        
-        
-        self.baseTextView.text = ""
-        //Input Text Field setup
-        self.inputTextField.layer.borderWidth = 2.0
-        self.inputTextField.layer.borderColor = UIColor.blue.cgColor
-        self.inputTextField.layer.cornerRadius = 3.0
         
         //Create and start the peripheral manager
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
@@ -56,50 +42,32 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.baseTextView.text = ""
-        
+    
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        // peripheralManager?.stopAdvertising()
-        // self.peripheralManager = nil
+
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self)
-        
     }
-    
     
     @IBAction func goToChart(_ sender: Any) {
         performSegue(withIdentifier: "goToChartView", sender: self)
         
-        
-        
     }
-    
-    
     
     func updateIncomingData () {
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "Notify"), object: nil , queue: nil){
             notification in
             var strLength: Int
             
-            let appendString = "\n"
+            // let appendString = "\n"
             let leadSpace = " "
             let tempUnits = "\u{00B0} C"
             let humUnits = " % RH"
             let labelString = leadSpace + (characteristicASCIIValue as String)
-            let myFont = UIFont(name: "Helvetica Neue", size: 20.0)
-            let myAttributes2 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.darkGray]
-            let attribString = NSAttributedString(string: "[Rec]:   " + (characteristicASCIIValue as String) + appendString, attributes: myAttributes2)
-            let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
-            // self.baseTextView.attributedText = NSAttributedString(string: (characteristicASCIIValue as String), attributes: myAttributes2)
-            
-            newAsciiText.append(attribString)
-            
-            self.consoleAsciiText = newAsciiText
             
             strLength = labelString.count
-            // print(strLength)
             
             if strLength == 19 {
             let TSindex = labelString.index(labelString.startIndex, offsetBy: 2)
@@ -118,7 +86,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
             
                 if let tempFloat = NumberFormatter().number(from: tempString) {
                     self.tValue = tempFloat.doubleValue
-                    // print(self.tValue)
                     
                     for index in 0...8 {
                         self.tempDataArray[index] = self.tempDataArray[index + 1]
@@ -130,15 +97,18 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
                              print("tempString is , \(tempString)")
                     }
                 
-                // print(self.tempDataArray)
-            
             tempString = tempString + tempUnits
             humString = humString + humUnits
             self.newLabel.text = tempString
             self.humLabel.text = humString
                 
-                
-                
+                if self.blinker == true {
+                    self.blinkLamp.backgroundColor = UIColor.red
+                    self.blinker = false
+                } else {
+                    self.blinkLamp.backgroundColor = UIColor.orange
+                    self.blinker = true
+                }
                 
                 
             let battValue = String(labelString[battRange])
@@ -177,36 +147,8 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
                     self.battColor.backgroundColor = UIColor.black
                     self.battColor.textColor = UIColor.black
                     }
-                
             }
-            
-            else {
-            self.baseTextView.attributedText = self.consoleAsciiText
-            }
-        
         }
-    }
-    
-    
-    func outgoingData () {
-        let appendString = "\n"
-        
-        let inputText = inputTextField.text
-        
-        let myFont = UIFont(name: "Helvetica Neue", size: 15.0)
-        let myAttributes1 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.blue]
-        
-        writeValue(data: inputText!)
-        
-        let attribString = NSAttributedString(string: "[Outgoing]: " + inputText! + appendString, attributes: myAttributes1)
-        let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
-        newAsciiText.append(attribString)
-        
-        consoleAsciiText = newAsciiText
-        baseTextView.attributedText = consoleAsciiText
-        //erase what's in the text field
-        inputTextField.text = ""
-        
     }
     
     // Write functions
@@ -220,31 +162,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
         }
     }
     
-    func writeCharacteristic(val: Int8){
-        var val = val
-        let ns = NSData(bytes: &val, length: MemoryLayout<Int8>.size)
-        blePeripheral!.writeValue(ns as Data, for: txCharacteristic!, type: CBCharacteristicWriteType.withResponse)
-    }
-    
-    
-    
-    //MARK: UITextViewDelegate methods
-    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        if textView === baseTextView {
-            //tapping on consoleview dismisses keyboard
-            inputTextField.resignFirstResponder()
-            return false
-        }
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        scrollView.setContentOffset(CGPoint(x:0, y:250), animated: true)
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        scrollView.setContentOffset(CGPoint(x:0, y:0), animated: true)
-    }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
@@ -263,21 +180,12 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     @IBAction func switchAction(_ sender: Any) {
         if switchUI.isOn {
             print("On ")
-            // writeCharacteristic(val: 1)
-            // print(writeCharacteristic)
             writeValue(data: "1")
-            self.baseTextView.backgroundColor = UIColor.lightGray
-            
         }
         else
         {
-            
             print("Off")
-//            writeCharacteristic(val: 0)
-//            print(writeCharacteristic)
             writeValue(data: "0")
-            self.baseTextView.backgroundColor = UIColor.darkGray
-            self.baseTextView.textColor = UIColor.darkGray
         }
     }
     
@@ -287,7 +195,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, U
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        outgoingData()
+        // outgoingData()
         return(true)
     }
     
