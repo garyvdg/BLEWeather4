@@ -40,6 +40,17 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         blinkLamp.text = ""
         chart.delegate = self
         
+        let userDefaults = UserDefaults.standard
+        chart.maxY = Double(userDefaults.integer(forKey: "graphMax"))
+        // let offSet = chart.maxY
+        
+        
+        
+        
+        
+        
+        
+        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
         
         //Create and start the peripheral manager
@@ -47,9 +58,8 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         chart.gridColor = UIColor.white
         chart.showXLabelsAndGrid = false
         chart.minY = 0.0
-        chart.maxY = 20.0
         
-    
+        
         
         //-Notification for updating the text view with incoming text
         updateIncomingData()

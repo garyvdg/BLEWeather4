@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9A0B95B221879C8A00AAD4A8 /* UUIDKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0B95B121879C8A00AAD4A8 /* UUIDKey.swift */; };
 		9A5B8928214D321E002DDFC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A5B8927214D321E002DDFC4 /* Assets.xcassets */; };
+		9A6E163F218B977D004A38FE /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A6E163E218B977D004A38FE /* Settings.bundle */; };
 		9AEE1E072188A0C80095E397 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE1E062188A0C80095E397 /* ChartViewController.swift */; };
 		B7620BF5B1E5C7F7812B5096 /* Pods_BLEWeather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E9D0FCE107049C7399B013 /* Pods_BLEWeather.framework */; };
 		D50657261DF45E04002B7557 /* UartModuleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50657251DF45E04002B7557 /* UartModuleViewController.swift */; };
@@ -24,6 +25,7 @@
 		9A0B95B121879C8A00AAD4A8 /* UUIDKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDKey.swift; sourceTree = "<group>"; };
 		9A5B8927214D321E002DDFC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A60592A01A874AF7924D411 /* Pods-BLEWeather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLEWeather.release.xcconfig"; path = "Pods/Target Support Files/Pods-BLEWeather/Pods-BLEWeather.release.xcconfig"; sourceTree = "<group>"; };
+		9A6E163E218B977D004A38FE /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		9AEE1E062188A0C80095E397 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		A560F318BE442A03A853C6EC /* Pods-BLEWeather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLEWeather.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLEWeather/Pods-BLEWeather.debug.xcconfig"; sourceTree = "<group>"; };
 		D50657251DF45E04002B7557 /* UartModuleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UartModuleViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				D5B24DE41DEE393B00D33B5A /* LaunchScreen.storyboard */,
 				D5B24DE71DEE393B00D33B5A /* Info.plist */,
 				9A5B8927214D321E002DDFC4 /* Assets.xcassets */,
+				9A6E163E218B977D004A38FE /* Settings.bundle */,
 			);
 			path = "Basic Chat";
 			sourceTree = "<group>";
@@ -163,6 +166,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A6E163F218B977D004A38FE /* Settings.bundle in Resources */,
 				D5B24DE61DEE393B00D33B5A /* LaunchScreen.storyboard in Resources */,
 				9A5B8928214D321E002DDFC4 /* Assets.xcassets in Resources */,
 				D5B24DE11DEE393B00D33B5A /* Main.storyboard in Resources */,
