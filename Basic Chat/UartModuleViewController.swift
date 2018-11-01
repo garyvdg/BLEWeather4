@@ -27,11 +27,13 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
     var peripheralManager: CBPeripheralManager?
     var peripheral: CBPeripheral!
     private var consoleAsciiText:NSAttributedString? = NSAttributedString(string: "")
-    var tValue : Double = 0
+    
+    var counter : Int = 0
+    var tValue : Double = 0.0
+    var tempData : Double = 0.0
+    
     var tempDataArray = Array(repeating: 0.0, count: 360)
     var blinker : Bool = true
-    
-    // let chart = Chart(frame: CGRect(x: 10, y: 100, width: 200, height: 100))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +74,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "Notify"), object: nil , queue: nil){
             notification in
             var strLength: Int
-            
+            self.counter = self.counter + 1
             // let appendString = "\n"
             let leadSpace = " "
             let tempUnits = "\u{00B0} C"
@@ -96,29 +98,20 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
             var tempString = String(labelString[Trange])
             var humString = String(labelString[Hrange])
             
-                if let tempFloat = NumberFormatter().number(from: tempString) {
-                    self.tValue = tempFloat.doubleValue
-                    
-                    for index in 0...358 {
-                        self.tempDataArray[index] = self.tempDataArray[index + 1]
-                        }
-                    
-                    self.tempDataArray[359] = self.tValue
-                    
-                    } else {
-                             print("tempString is , \(tempString)")
-                    }
                 
+                
+                    
+                    if let tempFloat = NumberFormatter().number(from: tempString) {
+                        self.tValue = tempFloat.doubleValue
+                        self.tempData = self.tempData + self.tValue
+                        
+                    }
+
             tempString = tempString + tempUnits
             humString = humString + humUnits
             self.newLabel.text = tempString
             self.humLabel.text = humString
                 
-                self.chart.removeAllSeries()
-                let series = ChartSeries(self.tempDataArray)
-                series.color = ChartColors.yellowColor()
-                
-                self.chart.add(series)
                 
                 
                 if self.blinker == true {
@@ -167,7 +160,37 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                     self.battColor.textColor = UIColor.black
                     }
             }
+            
+            
+            print(self.counter)
+            if self.counter > 3 {
+                
+                if self.tempDataArray.count >= 360 {
+                    self.tempDataArray.remove(at: 0)
+                }
+                
+                self.tempDataArray.append(self.tempData / 4.0)
+                self.tempData = 0
+                self.counter = 0
+                self.chart.removeAllSeries()
+                let series = ChartSeries(self.tempDataArray)
+                series.color = ChartColors.yellowColor()
+                
+                self.chart.add(series)
+            }
+            
+            
+            
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
     
     // Write functions
