@@ -5,7 +5,7 @@
 //  Created by Trevor Beaton on 11/29/16.
 //  Copyright © 2016 Vanguard Logic LLC. All rights reserved.
 //
-//  Modified by Gary Vandergaast 2018 October
+//  Modified by Gary Vandergaast 2018 October 29
 
 import Foundation
 import UIKit

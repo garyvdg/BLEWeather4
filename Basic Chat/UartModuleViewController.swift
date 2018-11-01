@@ -4,7 +4,7 @@
 //
 //  Created by Trevor Beaton on 12/4/16.
 //  Copyright © 2016 Vanguard Logic LLC. All rights reserved.
-//
+//  Modified by Gary Vandergaast 2018 November 1
 
 
 import UIKit
@@ -13,7 +13,8 @@ import CoreBluetooth
 class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
     
     //UI
-    @IBOutlet weak var baseTextView: UITextView!
+    
+    @IBOutlet weak var blinkLamp: UILabel!
     @IBOutlet weak var humLabel: UILabel!
     @IBOutlet weak var newLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -25,9 +26,11 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
     private var consoleAsciiText:NSAttributedString? = NSAttributedString(string: "")
     var tValue : Double = 0
     var tempDataArray = Array(repeating: 0.0, count: 10)
+    var blinker : Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        blinkLamp.text = ""
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
         
@@ -98,6 +101,15 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
             humString = humString + humUnits
             self.newLabel.text = tempString
             self.humLabel.text = humString
+                
+                if self.blinker == true {
+                    self.blinkLamp.backgroundColor = UIColor.red
+                    self.blinker = false
+                } else {
+                    self.blinkLamp.backgroundColor = UIColor.orange
+                    self.blinker = true
+                }
+                
                 
             let battValue = String(labelString[battRange])
                 

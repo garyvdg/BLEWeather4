@@ -43,9 +43,9 @@ class ChartViewController: UIViewController, CBPeripheralManagerDelegate {
             let myAttributes3 = [NSAttributedString.Key.font: thisFont!, NSAttributedString.Key.foregroundColor: UIColor.darkGray]
             
             countValue = self.rawDataList.text.count
-            let countString = String(countValue)
+            // print(countValue)
             
-            let modString = NSAttributedString(string: "   " + (characteristicASCIIValue as String) + "   " + countString + addToString, attributes: myAttributes3)
+            let modString = NSAttributedString(string: "   " + (characteristicASCIIValue as String) + addToString, attributes: myAttributes3)
             let textText = NSMutableAttributedString(attributedString: self.buildupAsciiText!)
 
             textText.append(modString)
@@ -53,7 +53,7 @@ class ChartViewController: UIViewController, CBPeripheralManagerDelegate {
             self.buildupAsciiText = textText
             self.rawDataList.attributedText = self.buildupAsciiText
             
-            if countValue >= 650 {
+            if countValue >= 562 {
                 self.buildupAsciiText = NSAttributedString(string: "")
             }
         }

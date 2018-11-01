@@ -173,6 +173,14 @@
                                                     <action selector="goToChart:" destination="aQA-m6-Bjv" eventType="touchUpInside" id="RCs-Ti-eGZ"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="L" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6v5-uI-Qkk">
+                                                <rect key="frame" x="351" y="14" width="16" height="16"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.99813264608383179" green="0.410429447889328" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -216,6 +224,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="battColor" destination="pyL-wG-WP2" id="d8T-bX-862"/>
+                        <outlet property="blinkLamp" destination="6v5-uI-Qkk" id="L6k-ED-upZ"/>
                         <outlet property="humLabel" destination="Uv3-jW-OvO" id="KUc-ue-AhG"/>
                         <outlet property="newLabel" destination="A2j-Dg-dTR" id="0tU-dD-9gj"/>
                         <outlet property="scrollView" destination="fEQ-Id-Qp8" id="FsD-lV-H8p"/>
@@ -245,15 +254,19 @@
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xwx-tt-h2V">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                         <subviews>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" scrollEnabled="NO" editable="NO" text="Raw data." textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ee1-eA-ZdH">
-                                                <rect key="frame" x="26" y="28" width="323" height="584"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Raw data." textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ee1-eA-ZdH">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="33"/>
                                                 <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="ee1-eA-ZdH" firstAttribute="leading" secondItem="xwx-tt-h2V" secondAttribute="leading" id="DMS-f8-EtV"/>
+                                            <constraint firstItem="ee1-eA-ZdH" firstAttribute="top" secondItem="xwx-tt-h2V" secondAttribute="top" id="Gnp-gP-lw6"/>
+                                            <constraint firstAttribute="trailing" secondItem="ee1-eA-ZdH" secondAttribute="trailing" id="c5D-kU-rSo"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
