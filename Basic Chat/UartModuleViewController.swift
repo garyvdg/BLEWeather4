@@ -30,14 +30,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
         super.viewDidLoad()
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
-//        self.baseTextView.delegate = self
-//
-//        //Base text view setup
-//        self.baseTextView.layer.borderWidth = 3.0
-//        self.baseTextView.layer.borderColor = UIColor.darkGray.cgColor
-//        self.baseTextView.layer.cornerRadius = 3.0
-//
-//        self.baseTextView.text = ""
         
         //Create and start the peripheral manager
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
@@ -47,13 +39,11 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // self.baseTextView.text = ""
-        
+    
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        // peripheralManager?.stopAdvertising()
-        // self.peripheralManager = nil
+
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
@@ -73,18 +63,8 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
             let tempUnits = "\u{00B0} C"
             let humUnits = " % RH"
             let labelString = leadSpace + (characteristicASCIIValue as String)
-//            let myFont = UIFont(name: "Helvetica Neue", size: 20.0)
-//            let myAttributes2 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.darkGray]
-//            let attribString = NSAttributedString(string: "[Rec]:   " + (characteristicASCIIValue as String) + appendString, attributes: myAttributes2)
-//            let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
-//            // self.baseTextView.attributedText = NSAttributedString(string: (characteristicASCIIValue as String), attributes: myAttributes2)
-//
-//            newAsciiText.append(attribString)
-//
-//            self.consoleAsciiText = newAsciiText
             
             strLength = labelString.count
-            // print(strLength)
             
             if strLength == 19 {
             let TSindex = labelString.index(labelString.startIndex, offsetBy: 2)
@@ -103,7 +83,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
             
                 if let tempFloat = NumberFormatter().number(from: tempString) {
                     self.tValue = tempFloat.doubleValue
-                    // print(self.tValue)
                     
                     for index in 0...8 {
                         self.tempDataArray[index] = self.tempDataArray[index + 1]
@@ -115,8 +94,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
                              print("tempString is , \(tempString)")
                     }
                 
-                // print(self.tempDataArray)
-            
             tempString = tempString + tempUnits
             humString = humString + humUnits
             self.newLabel.text = tempString
@@ -158,37 +135,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
                     self.battColor.backgroundColor = UIColor.black
                     self.battColor.textColor = UIColor.black
                     }
-                
             }
-            
-//            else {
-//            self.baseTextView.attributedText = self.consoleAsciiText
-//            }
-        
         }
     }
-    
-    
-//    func outgoingData () {
-//        let appendString = "\n"
-//
-//        let inputText = inputTextField.text
-//
-//        let myFont = UIFont(name: "Helvetica Neue", size: 15.0)
-//        let myAttributes1 = [NSAttributedString.Key.font: myFont!, NSAttributedString.Key.foregroundColor: UIColor.blue]
-//
-//        writeValue(data: inputText!)
-//
-//        let attribString = NSAttributedString(string: "[Outgoing]: " + inputText! + appendString, attributes: myAttributes1)
-//        let newAsciiText = NSMutableAttributedString(attributedString: self.consoleAsciiText!)
-//        newAsciiText.append(attribString)
-//
-//        consoleAsciiText = newAsciiText
-//        baseTextView.attributedText = consoleAsciiText
-//        //erase what's in the text field
-//        inputTextField.text = ""
-//
-//    }
     
     // Write functions
     func writeValue(data: String){
@@ -201,31 +150,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
         }
     }
     
-//    func writeCharacteristic(val: Int8){
-//        var val = val
-//        let ns = NSData(bytes: &val, length: MemoryLayout<Int8>.size)
-//        blePeripheral!.writeValue(ns as Data, for: txCharacteristic!, type: CBCharacteristicWriteType.withResponse)
-//    }
-    
-    
-    
-    //MARK: UITextViewDelegate methods
-//    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-//        if textView === baseTextView {
-//            //tapping on consoleview dismisses keyboard
-//            // inputTextField.resignFirstResponder()
-//            return false
-//        }
-//        return true
-//    }
-    
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        scrollView.setContentOffset(CGPoint(x:0, y:250), animated: true)
-//    }
-//
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        scrollView.setContentOffset(CGPoint(x:0, y:0), animated: true)
-//    }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
@@ -244,15 +168,11 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
     @IBAction func switchAction(_ sender: Any) {
         if switchUI.isOn {
             print("On ")
-            // writeCharacteristic(val: 1)
-            // print(writeCharacteristic)
             writeValue(data: "1")
         }
         else
         {
             print("Off")
-//            writeCharacteristic(val: 0)
-//            print(writeCharacteristic)
             writeValue(data: "0")
         }
     }

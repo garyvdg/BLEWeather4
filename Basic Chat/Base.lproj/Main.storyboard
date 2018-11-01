@@ -227,10 +227,10 @@
             </objects>
             <point key="canvasLocation" x="1100" y="-4.0479760119940034"/>
         </scene>
-        <!--Chart View-->
+        <!--Raw Data View-->
         <scene sceneID="zzj-ia-NH7">
             <objects>
-                <viewController title="Chart View" id="Q1H-WR-ZKS" customClass="ChartViewController" customModule="BLEWeather" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Raw Data View" id="Q1H-WR-ZKS" customClass="ChartViewController" customModule="BLEWeather" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Bva-ve-Isd"/>
                         <viewControllerLayoutGuide type="bottom" id="gML-0V-f61"/>
@@ -239,15 +239,39 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Raw data." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ee1-eA-ZdH">
-                                <rect key="frame" x="16" y="117" width="343" height="191"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dhX-tD-ua7">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xwx-tt-h2V">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" scrollEnabled="NO" editable="NO" text="Raw data." textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ee1-eA-ZdH">
+                                                <rect key="frame" x="26" y="28" width="323" height="584"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="xwx-tt-h2V" secondAttribute="bottom" id="D9K-S5-nvq"/>
+                                    <constraint firstItem="xwx-tt-h2V" firstAttribute="leading" secondItem="dhX-tD-ua7" secondAttribute="leading" id="Nfy-pN-Knz"/>
+                                    <constraint firstItem="xwx-tt-h2V" firstAttribute="width" secondItem="dhX-tD-ua7" secondAttribute="width" id="PQB-6N-Xa4"/>
+                                    <constraint firstAttribute="trailing" secondItem="xwx-tt-h2V" secondAttribute="trailing" id="RcS-cw-w8a"/>
+                                    <constraint firstItem="xwx-tt-h2V" firstAttribute="top" secondItem="dhX-tD-ua7" secondAttribute="top" id="uep-m5-sOh"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.45523232221603394" green="0.73864537477493286" blue="0.90959548950195312" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="dhX-tD-ua7" firstAttribute="leading" secondItem="y6r-AK-lbq" secondAttribute="leading" id="95y-RP-4Mt"/>
+                            <constraint firstItem="dhX-tD-ua7" firstAttribute="top" secondItem="y6r-AK-lbq" secondAttribute="top" id="e28-sD-ube"/>
+                            <constraint firstAttribute="trailing" secondItem="dhX-tD-ua7" secondAttribute="trailing" id="eex-kH-QOU"/>
+                            <constraint firstItem="gML-0V-f61" firstAttribute="top" secondItem="dhX-tD-ua7" secondAttribute="bottom" id="jaF-Ia-iHi"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="rawDataList" destination="ee1-eA-ZdH" id="qXA-jS-ZF4"/>

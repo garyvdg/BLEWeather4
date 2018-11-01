@@ -11,47 +11,53 @@ import CoreBluetooth
 
 class ChartViewController: UIViewController, CBPeripheralManagerDelegate {
     
-
     @IBOutlet weak var rawDataList: UITextView!
     var periferalManager : CBPeripheralManager?
     var periferal : CBPeripheral!
-    
+    private var buildupAsciiText:NSAttributedString? = NSAttributedString(string: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
         periferalManager = CBPeripheralManager(delegate: self, queue: nil)
-        
+        self.rawDataList.text = ""
         updateRawData ()
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-//        periferalManager?.stopAdvertising()
-//        self.periferalManager = nil
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-        
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver((Any).self)
+    }
 
     func updateRawData () {
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "Notify"), object: nil , queue: nil){
             notification in
-            let firstSpace = "* "
-            // let addToString = "\n"
-            let textText = firstSpace + (characteristicASCIIValue as String)
-            
-            print(textText)
-            self.rawDataList.text = textText
-            
-        }
         
+            let addToString = "\n"
+            var countValue : Int = 0
+            
+            let thisFont = UIFont(name: "Helvetica Neue", size: 18.0)
+            let myAttributes3 = [NSAttributedString.Key.font: thisFont!, NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            
+            countValue = self.rawDataList.text.count
+            let countString = String(countValue)
+            
+            let modString = NSAttributedString(string: "   " + (characteristicASCIIValue as String) + "   " + countString + addToString, attributes: myAttributes3)
+            let textText = NSMutableAttributedString(attributedString: self.buildupAsciiText!)
+
+            textText.append(modString)
+    
+            self.buildupAsciiText = textText
+            self.rawDataList.attributedText = self.buildupAsciiText
+            
+            if countValue >= 650 {
+                self.buildupAsciiText = NSAttributedString(string: "")
+            }
+        }
     }
-    
-    
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
