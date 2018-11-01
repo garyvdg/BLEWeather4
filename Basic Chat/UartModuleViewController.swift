@@ -9,11 +9,14 @@
 
 import UIKit
 import CoreBluetooth
+import SwiftChart
 
-class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
+
+class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, ChartDelegate {
     
     //UI
     
+    @IBOutlet weak var chart: Chart!
     @IBOutlet weak var blinkLamp: UILabel!
     @IBOutlet weak var humLabel: UILabel!
     @IBOutlet weak var newLabel: UILabel!
@@ -25,17 +28,26 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
     var peripheral: CBPeripheral!
     private var consoleAsciiText:NSAttributedString? = NSAttributedString(string: "")
     var tValue : Double = 0
-    var tempDataArray = Array(repeating: 0.0, count: 10)
+    var tempDataArray = Array(repeating: 0.0, count: 360)
     var blinker : Bool = true
+    
+    // let chart = Chart(frame: CGRect(x: 10, y: 100, width: 200, height: 100))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         blinkLamp.text = ""
+        chart.delegate = self
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
         
         //Create and start the peripheral manager
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+        chart.gridColor = UIColor.white
+        chart.showXLabelsAndGrid = false
+        chart.minY = 0.0
+        chart.maxY = 20.0
+        
+    
         
         //-Notification for updating the text view with incoming text
         updateIncomingData()
@@ -87,11 +99,11 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
                 if let tempFloat = NumberFormatter().number(from: tempString) {
                     self.tValue = tempFloat.doubleValue
                     
-                    for index in 0...8 {
+                    for index in 0...358 {
                         self.tempDataArray[index] = self.tempDataArray[index + 1]
                         }
                     
-                    self.tempDataArray[9] = self.tValue
+                    self.tempDataArray[359] = self.tValue
                     
                     } else {
                              print("tempString is , \(tempString)")
@@ -101,6 +113,13 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
             humString = humString + humUnits
             self.newLabel.text = tempString
             self.humLabel.text = humString
+                
+                self.chart.removeAllSeries()
+                let series = ChartSeries(self.tempDataArray)
+                series.color = ChartColors.yellowColor()
+                
+                self.chart.add(series)
+                
                 
                 if self.blinker == true {
                     self.blinkLamp.backgroundColor = UIColor.red
@@ -205,5 +224,32 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate {
             return
         }
     }
+    
+    
+    // Chart delegate
+    
+    func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
+        for (seriesIndex, dataIndex) in indexes.enumerated() {
+            if let value = chart.valueForSeries(seriesIndex, atIndex: dataIndex) {
+                print("Touched series: \(seriesIndex): data index: \(dataIndex!); series value: \(value); x-axis value: \(x) (from left: \(left))")
+            }
+        }
+    }
+    
+    func didFinishTouchingChart(_ chart: Chart) {
+        
+    }
+    
+    func didEndTouchingChart(_ chart: Chart) {
+        
+    }
+    
+
+    
+    
+    
+    
+    
+    
 }
 

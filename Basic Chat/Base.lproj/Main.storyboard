@@ -181,6 +181,16 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="40d-ow-aVY" customClass="Chart" customModule="SwiftChart">
+                                                <rect key="frame" x="0.0" y="183" width="375" height="350"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="axesColor">
+                                                        <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -225,6 +235,7 @@
                     <connections>
                         <outlet property="battColor" destination="pyL-wG-WP2" id="d8T-bX-862"/>
                         <outlet property="blinkLamp" destination="6v5-uI-Qkk" id="L6k-ED-upZ"/>
+                        <outlet property="chart" destination="40d-ow-aVY" id="8VT-hn-srm"/>
                         <outlet property="humLabel" destination="Uv3-jW-OvO" id="KUc-ue-AhG"/>
                         <outlet property="newLabel" destination="A2j-Dg-dTR" id="0tU-dD-9gj"/>
                         <outlet property="scrollView" destination="fEQ-Id-Qp8" id="FsD-lV-H8p"/>
