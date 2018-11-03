@@ -6,11 +6,9 @@
 //  Copyright © 2016 Vanguard Logic LLC. All rights reserved.
 //  Modified by Gary Vandergaast 2018 November 1
 
-
 import UIKit
 import CoreBluetooth
 import SwiftChart
-
 
 class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, ChartDelegate {
     
@@ -32,7 +30,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
     var tValue : Double = 0.0
     var tempData : Double = 0.0
     
-    var tempDataArray = Array(repeating: 0.0, count: 360)
+    // var tempDataArray = Array(repeating: 0.0, count: 360)
+    var tempDataArray : [Double] = []
+    
     var blinker : Bool = true
     
     override func viewDidLoad() {
@@ -42,25 +42,21 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         
         let userDefaults = UserDefaults.standard
         chart.maxY = Double(userDefaults.integer(forKey: "graphMax"))
-        // let offSet = chart.maxY
+        chart.minY = Double(userDefaults.integer(forKey: "baseValue"))
         
-        
-        
-        
-        
-        
-        
+//        let offSet = chart.minY! + 8.0
+//
+//        for index in 0...359 {
+//            tempDataArray[index] = offSet
+//        }
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"Back", style:.plain, target:nil, action:nil)
         
         //Create and start the peripheral manager
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
         chart.gridColor = UIColor.white
-        chart.showXLabelsAndGrid = false
-        chart.minY = 0.0
-        
-        
-        
+        // chart.showXLabelsAndGrid = false
+        chart.xLabels = [0, 60, 120, 180, 240, 300, 360]
         //-Notification for updating the text view with incoming text
         updateIncomingData()
     }
@@ -108,22 +104,16 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
             var tempString = String(labelString[Trange])
             var humString = String(labelString[Hrange])
             
-                
-                
-                    
                     if let tempFloat = NumberFormatter().number(from: tempString) {
                         self.tValue = tempFloat.doubleValue
                         self.tempData = self.tempData + self.tValue
-                        
                     }
 
             tempString = tempString + tempUnits
             humString = humString + humUnits
             self.newLabel.text = tempString
             self.humLabel.text = humString
-                
-                
-                
+     
                 if self.blinker == true {
                     self.blinkLamp.backgroundColor = UIColor.red
                     self.blinker = false
@@ -131,7 +121,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                     self.blinkLamp.backgroundColor = UIColor.orange
                     self.blinker = true
                 }
-                
                 
             let battValue = String(labelString[battRange])
                 
@@ -171,15 +160,25 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                     }
             }
             
-            
             print(self.counter)
-            if self.counter > 3 {
+            if self.counter > 4 {
+                
+                if self.tempDataArray.count < 60 {
+                    self.chart.xLabels = [0, 15, 30, 45, 60]
+                } else
+                    if self.tempDataArray.count < 180 {
+                        self.chart.xLabels = [0, 60, 120, 180]
+                } else {
+                    self.chart.xLabels = [0, 60, 120, 180, 240, 300, 360]
+                }
+                
+                
                 
                 if self.tempDataArray.count >= 360 {
                     self.tempDataArray.remove(at: 0)
                 }
                 
-                self.tempDataArray.append(self.tempData / 4.0)
+                self.tempDataArray.append(self.tempData / 5.0)
                 self.tempData = 0
                 self.counter = 0
                 self.chart.removeAllSeries()
@@ -188,19 +187,8 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                 
                 self.chart.add(series)
             }
-            
-            
-            
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
+ 
     }
     
     // Write functions
@@ -213,7 +201,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
             }
         }
     }
-    
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
@@ -258,7 +245,6 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         }
     }
     
-    
     // Chart delegate
     
     func didTouchChart(_ chart: Chart, indexes: Array<Int?>, x: Double, left: CGFloat) {
@@ -276,13 +262,5 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
     func didEndTouchingChart(_ chart: Chart) {
         
     }
-    
-
-    
-    
-    
-    
-    
-    
 }
 
