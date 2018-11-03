@@ -82,7 +82,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
             var strLength: Int
             self.counter = self.counter + 1
             // let appendString = "\n"
-            let leadSpace = " "
+            let leadSpace = "*"
             let tempUnits = "\u{00B0} C"
             let humUnits = " % RH"
             let labelString = leadSpace + (characteristicASCIIValue as String)
@@ -102,12 +102,18 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
             let battRange = battIndexS..<battIndexE
                 
             var tempString = String(labelString[Trange])
+                print(tempString)
             var humString = String(labelString[Hrange])
             
-                    if let tempFloat = NumberFormatter().number(from: tempString) {
-                        self.tValue = tempFloat.doubleValue
+                if let tempFloat = NumberFormatter().number(from: tempString) {
+                
+                        
+                    self.tValue = tempFloat.doubleValue
                         self.tempData = self.tempData + self.tValue
+                        
                     }
+    
+                print(self.tempData)
 
             tempString = tempString + tempUnits
             humString = humString + humUnits
@@ -160,7 +166,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                     }
             }
             
-            print(self.counter)
+            // print(self.counter)
             if self.counter > 4 {
                 
                 if self.tempDataArray.count < 60 {
