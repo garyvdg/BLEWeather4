@@ -29,6 +29,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
     var counter : Int = 0
     var tValue : Double = 0.0
     var tempData : Double = 0.0
+    var zeroLevel : Double = 0.0
     
     // var tempDataArray = Array(repeating: 0.0, count: 360)
     var tempDataArray : [Double] = []
@@ -43,6 +44,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         let userDefaults = UserDefaults.standard
         chart.maxY = Double(userDefaults.integer(forKey: "graphMax"))
         chart.minY = Double(userDefaults.integer(forKey: "baseValue"))
+        zeroLevel = (chart.maxY! + chart.minY!) / 2
+        
+    
         
 //        let offSet = chart.minY! + 8.0
 //
@@ -57,6 +61,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         chart.gridColor = UIColor.white
         // chart.showXLabelsAndGrid = false
         chart.xLabels = [0, 60, 120, 180, 240, 300, 360]
+        
+        
+        
         //-Notification for updating the text view with incoming text
         updateIncomingData()
     }
@@ -82,20 +89,23 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
             var strLength: Int
             self.counter = self.counter + 1
             // let appendString = "\n"
-            let leadSpace = "*"
+            let leadSpace = " "
             let tempUnits = "\u{00B0} C"
             let humUnits = " % RH"
-            let labelString = leadSpace + (characteristicASCIIValue as String)
-            
+            // let labelString = leadSpace + (characteristicASCIIValue as String)
+            let labelString = characteristicASCIIValue as String
+            print(labelString)
             strLength = labelString.count
+            print(strLength)
             
             if strLength == 19 {
             let TSindex = labelString.index(labelString.startIndex, offsetBy: 2)
             let TEindex = labelString.index(labelString.startIndex, offsetBy: 8)
             let HSindex = labelString.index(labelString.startIndex, offsetBy: 12)
             let HEindex = labelString.index(labelString.endIndex, offsetBy: -2)
-            let battIndexS = labelString.index(labelString.startIndex, offsetBy: 18)
-            let battIndexE = labelString.index(labelString.endIndex, offsetBy: 0)
+            let battIndexS = labelString.index(labelString.startIndex, offsetBy: 17)
+            let battIndexE = labelString.index(labelString.endIndex, offsetBy: -1)
+         
             
             let Trange = TSindex..<TEindex
             let Hrange = HSindex..<HEindex
@@ -103,8 +113,9 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                 
             var tempString = String(labelString[Trange])
                 print(tempString)
+                
             var humString = String(labelString[Hrange])
-            
+            print(humString)
                 if let tempFloat = NumberFormatter().number(from: tempString) {
                 
                         
@@ -113,10 +124,10 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                         
                     }
     
-                print(self.tempData)
+                // print(self.tempData)
 
-            tempString = tempString + tempUnits
-            humString = humString + humUnits
+            tempString = leadSpace + tempString + tempUnits
+            humString = leadSpace + humString + humUnits
             self.newLabel.text = tempString
             self.humLabel.text = humString
      
@@ -129,41 +140,54 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                 }
                 
             let battValue = String(labelString[battRange])
+                print(battValue)
+                
                 
                 if battValue == "b"
                 {
                     self.battColor.backgroundColor = UIColor.blue
                     self.battColor.textColor = UIColor.white
+                    self.battColor.text = "> 4.05"
                 }
                 else
                     if battValue == "g"
                     {
                     self.battColor.backgroundColor = UIColor.green
                     self.battColor.textColor = UIColor.black
+                    self.battColor.text = "> 3.95"
+                    }
+                else
+                    if battValue == "p"
+                    {
+                    self.battColor.backgroundColor = UIColor.brown
                     }
                 else
                     if battValue == "y"
                     {
                     self.battColor.backgroundColor = UIColor.yellow
                     self.battColor.textColor = UIColor.blue
+                    self.battColor.text = "> 3.85"
                     }
                 else
                     if battValue == "o"
                     {
                     self.battColor.backgroundColor = UIColor.orange
                     self.battColor.textColor = UIColor.black
+                    self.battColor.text = "> 3.75"
                     }
                 else
                     if battValue == "r"
                     {
                     self.battColor.backgroundColor = UIColor.red
                     self.battColor.textColor = UIColor.black
+                    self.battColor.text = "<3.75"
                     }
                         
                 else {
-                    self.battColor.backgroundColor = UIColor.black
+                    self.battColor.backgroundColor = UIColor.gray
                     self.battColor.textColor = UIColor.black
                     }
+                
             }
             
             // print(self.counter)
@@ -189,7 +213,13 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                 self.counter = 0
                 self.chart.removeAllSeries()
                 let series = ChartSeries(self.tempDataArray)
-                series.color = ChartColors.yellowColor()
+                series.area = true
+                series.colors = (
+                    above: ChartColors.orangeColor(),
+                    below: ChartColors.cyanColor(),
+                    zeroLevel: self.zeroLevel
+                )
+                // series.color = ChartColors.yellowColor()
                 
                 self.chart.add(series)
             }
