@@ -249,6 +249,11 @@ class BLECentralViewController : UIViewController, CBCentralManagerDelegate, CBP
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
+        if error != nil {
+            print("Got error \(error!.localizedDescription)")
+            return
+        }
+        
         if characteristic == rxCharacteristic {
             if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue) {
                 characteristicASCIIValue = ASCIIstring

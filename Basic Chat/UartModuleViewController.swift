@@ -21,6 +21,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var switchUI: UISwitch!
     @IBOutlet weak var battColor: UILabel!
+    @IBOutlet weak var rhButton: UIButton!
     //Data
     var peripheralManager: CBPeripheralManager?
     var peripheral: CBPeripheral!
@@ -30,11 +31,14 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
     var tValue : Double = 0.0
     var tempData : Double = 0.0
     var zeroLevel : Double = 0.0
+    var hValue : Double = 0.0
+    var humData : Double = 0.0
     
-    // var tempDataArray = Array(repeating: 0.0, count: 360)
     var tempDataArray : [Double] = []
+    var humDataArray : [Double] = []
     
     var blinker : Bool = true
+    var showH : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +81,19 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
+    @IBAction func graphHumidity(_ sender: Any) {
+        if showH == false
+        {
+            rhButton.backgroundColor = UIColor.white
+            showH = true
+        }
+        else
+            if showH == true
+            {
+                rhButton.backgroundColor = UIColor.black
+                showH = false
+        }
+    }
     
     @IBAction func goToChart(_ sender: Any) {
         performSegue(withIdentifier: "goToChartView", sender: self)
@@ -116,6 +133,7 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                 
             var humString = String(labelString[Hrange])
             print(humString)
+                
                 if let tempFloat = NumberFormatter().number(from: tempString) {
                 
                         
@@ -123,6 +141,15 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                         self.tempData = self.tempData + self.tValue
                         
                     }
+                
+                
+                if let humFloat = NumberFormatter().number(from: humString) {
+                    
+                    
+                    self.hValue = humFloat.doubleValue
+                    self.humData = self.humData + self.hValue
+                    
+                }
     
                 // print(self.tempData)
 
@@ -160,6 +187,8 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                     if battValue == "p"
                     {
                     self.battColor.backgroundColor = UIColor.brown
+                    self.battColor.textColor = UIColor.white
+                    self.battColor.text = "> 4.15"
                     }
                 else
                     if battValue == "y"
@@ -202,25 +231,32 @@ class UartModuleViewController: UIViewController, CBPeripheralManagerDelegate, C
                     self.chart.xLabels = [0, 60, 120, 180, 240, 300, 360]
                 }
                 
-                
-                
                 if self.tempDataArray.count >= 360 {
                     self.tempDataArray.remove(at: 0)
+                    self.humDataArray.remove(at: 0)
                 }
                 
                 self.tempDataArray.append(self.tempData / 5.0)
+                self.humDataArray.append(self.humData / 5.0)
                 self.tempData = 0
+                self.humData = 0
                 self.counter = 0
                 self.chart.removeAllSeries()
                 let series = ChartSeries(self.tempDataArray)
-                series.area = true
-                series.colors = (
-                    above: ChartColors.orangeColor(),
-                    below: ChartColors.cyanColor(),
-                    zeroLevel: self.zeroLevel
-                )
-                // series.color = ChartColors.yellowColor()
+                let seriesH = ChartSeries(self.humDataArray)
                 
+                if self.showH == true {
+                    series.color = ChartColors.yellowColor()
+                    self.chart.add(seriesH)
+                }
+                else {
+                    series.area = true
+                    series.colors = (
+                        above: ChartColors.orangeColor(),
+                        below: ChartColors.cyanColor(),
+                        zeroLevel: self.zeroLevel
+                    )
+                }
                 self.chart.add(series)
             }
         }

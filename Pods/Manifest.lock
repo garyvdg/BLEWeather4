@@ -5,12 +5,12 @@ DEPENDENCIES:
   - SwiftChart
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - SwiftChart
 
 SPEC CHECKSUMS:
   SwiftChart: ba767a678d568a5ee22d419e146a0582865e1aff
 
-PODFILE CHECKSUM: 7ee5973b1123ee4c96d11e12589c89193934d75d
+PODFILE CHECKSUM: 6531cfe3909fa0e833817bffde2f79364d4d9bbb
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4
